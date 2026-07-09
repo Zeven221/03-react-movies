@@ -13,12 +13,17 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalContent , setModalContent] = useState<Movie>()
+  const [modalContent, setModalContent] = useState<Movie>();
   const closeModal = () => setIsModalOpen(false);
   const openModal = () => setIsModalOpen(true);
   const handleFilmClick = (event: React.MouseEvent<HTMLLIElement>) => {
-    setModalContent(movies.find(movie => event.currentTarget.getAttribute('id') === movie.id.toString()) as Movie)
-    openModal()
+    setModalContent(
+      movies.find(
+        (movie) =>
+          event.currentTarget.getAttribute("id") === movie.id.toString(),
+      ) as Movie,
+    );
+    openModal();
   };
   const handleSearch = async (query: string) => {
     setMovies([]);
@@ -29,15 +34,16 @@ function App() {
     try {
       setIsLoading(true);
       const response = await fetchMovies({ query });
+      if (!response.length) {
+        toast.error("No movies found for your request.");
+        return
+      }
       setMovies(response);
+      
     } catch {
       setIsError(true);
     } finally {
       setIsLoading(false);
-    }
-
-    if (!movies.length) {
-      toast.error("No movies found for your request.");
     }
   };
   return (

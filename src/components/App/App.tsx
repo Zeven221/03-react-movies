@@ -12,14 +12,12 @@ function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState<Movie | null>();
-  const closeModal = () => setIsModalOpen(false);
-  const openModal = () => setIsModalOpen(true);
-  const handleMovieClick = (movie: object) => {
-    console.log(movies.find(elem => elem === movie))
+  const [modalContent, setModalContent] = useState<Movie | null>(null);
+  const setIsModalMenuClose = () => {
     setModalContent(null)
-    openModal()
+  }
+  const handleMovieClick = (movie: Movie) => {
+    setModalContent(movie)
   };
   const handleSearch = async (query: string) => {
     setMovies([]);
@@ -42,8 +40,8 @@ function App() {
   return (
     <div className={css.app}>
       <Toaster />
-      {isModalOpen && (
-        <MovieModal onClose={closeModal} movie={modalContent as Movie} />
+      {modalContent !== null && (
+        <MovieModal onClose={setIsModalMenuClose} movie={modalContent} />
       )}
       {isError && <ErrorMessage />}
       {isLoading && <Loader />}

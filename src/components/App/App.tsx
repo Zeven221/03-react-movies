@@ -16,7 +16,10 @@ function App() {
   const [modalContent, setModalContent] = useState<Movie | null>();
   const closeModal = () => setIsModalOpen(false);
   const openModal = () => setIsModalOpen(true);
-  const handleFilmClick = (movie: object) => {
+  const handleMovieClick = (movie: object) => {
+    console.log(movies.find(elem => elem === movie))
+    setModalContent(null)
+    openModal()
   };
   const handleSearch = async (query: string) => {
     setMovies([]);
@@ -46,7 +49,7 @@ function App() {
       {isLoading && <Loader />}
       <SearchBar onSubmit={handleSearch}></SearchBar>
       {movies.length > 0 && (
-        <MovieGrid movies={movies} onSelect={handleFilmClick}/>
+        <MovieGrid movies={movies} onSelect={handleMovieClick}/>
       )}
     </div>
   );

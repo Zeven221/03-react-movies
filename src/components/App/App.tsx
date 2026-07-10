@@ -13,24 +13,14 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState<Movie>();
+  const [modalContent, setModalContent] = useState<Movie | null>();
   const closeModal = () => setIsModalOpen(false);
   const openModal = () => setIsModalOpen(true);
-  const handleFilmClick = (event: React.MouseEvent<HTMLLIElement>) => {
-    setModalContent(
-      movies.find(
-        (movie) =>
-          event.currentTarget.getAttribute("id") === movie.id.toString(),
-      ) as Movie,
-    );
-    openModal();
+  const handleFilmClick = (movie: object) => {
   };
   const handleSearch = async (query: string) => {
     setMovies([]);
-    if (!query.trim().length) {
-      toast.error("Please enter your search query.");
-      return;
-    }
+    setIsError(false);
     try {
       setIsLoading(true);
       const response = await fetchMovies({ query });
@@ -54,9 +44,9 @@ function App() {
       )}
       {isError && <ErrorMessage />}
       {isLoading && <Loader />}
-      <SearchBar onSearch={handleSearch}></SearchBar>
+      <SearchBar onSubmit={handleSearch}></SearchBar>
       {movies.length > 0 && (
-        <MovieGrid movies={movies} onSelect={handleFilmClick} />
+        <MovieGrid movies={movies} onSelect={handleFilmClick}/>
       )}
     </div>
   );
